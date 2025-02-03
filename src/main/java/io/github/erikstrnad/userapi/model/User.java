@@ -1,5 +1,6 @@
 package io.github.erikstrnad.userapi.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,11 +20,14 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(hidden = true)
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @Schema(example = "testuser")
     private String username;
 
     @Column(nullable = false)
+    @Schema(example = "Test@1234")
     private String password;
 }

@@ -6,6 +6,9 @@ import io.github.erikstrnad.userapi.model.User;
 import io.github.erikstrnad.userapi.repository.UserRepository;
 import io.github.erikstrnad.userapi.service.CustomUserDetailsService;
 import io.github.erikstrnad.userapi.util.JwtUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +33,8 @@ import java.util.stream.Collectors;
  * Passwords are securely hashed using a PasswordEncoder (BCrypt).
  */
 @RestController
+@Tag(name = "User Controller", description = "Endpoints for user authentication and user data management.")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final AuthenticationManager authenticationManager;
@@ -111,6 +116,8 @@ public class UserController {
      * @param authentication The authentication object representing the current user.
      * @return A ResponseEntity containing the user's details if found, or an error message.
      */
+    @Operation(summary = "Get authenticated user", description = "Returns the details of the currently logged-in user.",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/getUser")
     public ResponseEntity<?> getUser(Authentication authentication) {
         String username = authentication.getName();
@@ -131,6 +138,8 @@ public class UserController {
      *
      * @return A ResponseEntity containing a list of UserResponse DTOs.
      */
+    @Operation(summary = "Get all users", description = "Returns a list of all registered users.",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/getUsers")
     public ResponseEntity<?> getUsers() {
         List<UserResponse> users = userRepository.findAll().stream()
